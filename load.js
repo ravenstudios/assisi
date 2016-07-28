@@ -1,10 +1,11 @@
 var xmlhttp = checkBrowser();
 
+var jsonArray = [];
+
 function loadTable(){
 
 	ajax();
-	//createTable([["row 1, cell 1", "row 1, cell 2"], ["row 2, cell 1", "row 2, cell 2"]]);
-
+	
 }
 
 
@@ -12,9 +13,9 @@ function loadTable(){
 
 
 
-function ajax() { //pass in a number; 0 for read and 1 for write. Also pass in a string for the url
+function ajax() { 
 	
-	//console.log("ajax load called");
+	
 	
 
 	xmlhttp.onreadystatechange = function() {
@@ -23,7 +24,11 @@ function ajax() { //pass in a number; 0 for read and 1 for write. Also pass in a
 			//console.log("ajax response: " + xmlhttp.responseText);          
             var returnedJSON = JSON.parse(xmlhttp.responseText); 
             //console.log(returnedJSON);  
-            createTable(returnedJSON); 
+            createTable(makeArray(returnedJSON)); 
+
+
+
+            
 			
 		}
 	};
@@ -46,7 +51,9 @@ function checkBrowser(){
         }
 }
 
-function createTable(json){
+function createTable(array){
+
+	
 
 	var tags = ["Index", "Org", "Contact", "Adderss", "City", "State", "Zip", "County", "Phone", "Email", "webSite", "Info"];	
 
@@ -55,23 +62,46 @@ function createTable(json){
 
   	var row = document.createElement('tr');
 
+  	var cell;
+
   	for(var i = 0; i < tags.length; i++){
 
-  		var cell = document.createElement('th');
+  		cell = document.createElement('th');
     	cell.appendChild(document.createTextNode(tags[i]));
        	row.appendChild(cell);
   	}
 
   	tableBody.appendChild(row);
 
-  	for (var prop in json) {
+
+  	for(var r = 0; r < array.length; r++){
+
+  		row = document.createElement('tr');
+
+  		for(var c = 0; c < array[r].length; c++){
+
+  			cell = document.createElement('td');
+    		cell.appendChild(document.createTextNode(array[r][c]));
+     		row.appendChild(cell);
+
+  		}
+  		tableBody.appendChild(row);
+  	}
+ 
+
+
+  table.appendChild(tableBody);
+  document.getElementById("table").appendChild(table);
+
+}
+
+function makeArray(json){
+
+	for (var prop in json) {
 
   		if( json.hasOwnProperty( prop ) ) {
 
-  			row = document.createElement('tr');
-  			
-  			
-  			//console.log(json[prop][prop]);
+  			jsonArray.push([]);
 
   			var object = json[prop];
 
@@ -79,32 +109,13 @@ function createTable(json){
 
     			if (object.hasOwnProperty(property)) {
 
-    				//console.log(object[property]);
-
-    				var cell = document.createElement('td');
-    				cell.appendChild(document.createTextNode(object[property]));
-       				row.appendChild(cell);
+    				jsonArray[prop].push(object[property]);
 				}
 			}
-
-			tableBody.appendChild(row);
   		} 
-	}	
+	}
 
-  // tableData.forEach(function(rowData) {
-  //   var row = document.createElement('tr');
-
-  //   rowData.forEach(function(cellData) {
-  //     var cell = document.createElement('td');
-  //     cell.appendChild(document.createTextNode(cellData));
-  //     row.appendChild(cell);
-  //   });
-
-  //   tableBody.appendChild(row);
-  // });
-
-  table.appendChild(tableBody);
-  document.getElementById("table").appendChild(table);
+	return jsonArray;
 }
 
-//createTable([["row 1, cell 1", "row 1, cell 2"], ["row 2, cell 1", "row 2, cell 2"]]);
+
