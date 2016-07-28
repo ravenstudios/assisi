@@ -1,0 +1,33 @@
+.table{
+
+	/*border: 1px solid black;*/
+}
+table{
+	border-collapse: collapse;
+}
+
+table, th, td {
+   border: 1px solid black;
+   padding: 10px;
+}
+
+input[type="text"]{
+
+    width:200px
+}
+
+.controles{
+
+	 border: 1px solid black;
+}
+.searchBox{
+	float: left;
+}
+
+.searchButton{
+	float: left;
+}
+
+.submitButton{
+	float: left;
+}
